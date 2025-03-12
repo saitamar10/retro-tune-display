@@ -1,3 +1,4 @@
+
 import React, { useRef, useEffect, useState } from 'react';
 
 interface YouTubePlayerProps {
@@ -108,10 +109,17 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
     } else if (playerRef.current) {
       // Otherwise, update existing player state
       try {
-        if (isPlaying) {
-          playerRef.current.playVideo();
-        } else {
-          playerRef.current.pauseVideo();
+        // Add proper error handling around YouTube API calls
+        if (isPlaying && playerRef.current.getPlayerState && 
+            playerRef.current.getPlayerState() !== window.YT.PlayerState.PLAYING) {
+          if (typeof playerRef.current.playVideo === 'function') {
+            playerRef.current.playVideo();
+          }
+        } else if (!isPlaying && playerRef.current.getPlayerState && 
+                  playerRef.current.getPlayerState() === window.YT.PlayerState.PLAYING) {
+          if (typeof playerRef.current.pauseVideo === 'function') {
+            playerRef.current.pauseVideo();
+          }
         }
       } catch (error) {
         console.error('Error controlling YouTube player:', error);
@@ -121,8 +129,12 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
 
   // Update volume when it changes
   useEffect(() => {
-    if (playerRef.current && playerRef.current.setVolume) {
-      playerRef.current.setVolume(volume * 100);
+    if (playerRef.current && typeof playerRef.current.setVolume === 'function') {
+      try {
+        playerRef.current.setVolume(volume * 100);
+      } catch (error) {
+        console.error('Error setting volume:', error);
+      }
     }
   }, [volume]);
 
@@ -133,9 +145,12 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
     if (isPlaying && playerRef.current) {
       interval = setInterval(() => {
         try {
-          const currentTime = playerRef.current.getCurrentTime() || 0;
-          const duration = playerRef.current.getDuration() || 0;
-          onTimeUpdate(currentTime, duration);
+          if (typeof playerRef.current.getCurrentTime === 'function' && 
+              typeof playerRef.current.getDuration === 'function') {
+            const currentTime = playerRef.current.getCurrentTime() || 0;
+            const duration = playerRef.current.getDuration() || 0;
+            onTimeUpdate(currentTime, duration);
+          }
         } catch (error) {
           // Ignore errors when the player is not ready
         }

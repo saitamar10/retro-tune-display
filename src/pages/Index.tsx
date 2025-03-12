@@ -1,9 +1,8 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { toast } from 'sonner';
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { VideoDetails, defaultVideos, formatTime } from '@/services/youtubeService';
+import { VideoDetails, defaultVideos, formatTime, fetchVideoDetails } from '@/services/youtubeService';
 import VinylRecord from '@/components/VinylRecord';
 import PlayerControls from '@/components/PlayerControls';
 import PlaylistItem from '@/components/PlaylistItem';
@@ -31,7 +30,6 @@ const Index = () => {
     video.artist.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Load favorites from localStorage
   useEffect(() => {
     const savedFavorites = localStorage.getItem('vinyl-player-favorites');
     if (savedFavorites) {
@@ -43,23 +41,18 @@ const Index = () => {
     }
   }, []);
 
-  // Save favorites to localStorage
   useEffect(() => {
     localStorage.setItem('vinyl-player-favorites', JSON.stringify(favorites));
   }, [favorites]);
 
-  // Update arm position based on playback status
   useEffect(() => {
     if (isPlaying) {
-      // Move the arm onto the record when playing
       setArmPosition(0);
     } else {
-      // Return the arm to resting position when paused
       setArmPosition(-45);
     }
   }, [isPlaying]);
 
-  // Handle play/pause
   const handlePlayPause = () => {
     if (isPlayerReady) {
       setIsPlaying(!isPlaying);
@@ -68,29 +61,26 @@ const Index = () => {
     }
   };
 
-  // Handle skip to next track
   const handleSkipNext = () => {
     if (playlist.length > 0) {
       setCurrentIndex((currentIndex + 1) % playlist.length);
       setCurrentTime(0);
       if (isPlaying) {
-        setIsPlaying(true); // Maintain playing state
+        setIsPlaying(true);
       }
     }
   };
 
-  // Handle skip to previous track
   const handleSkipPrevious = () => {
     if (playlist.length > 0) {
       setCurrentIndex((currentIndex - 1 + playlist.length) % playlist.length);
       setCurrentTime(0);
       if (isPlaying) {
-        setIsPlaying(true); // Maintain playing state
+        setIsPlaying(true);
       }
     }
   };
 
-  // Handle seeking to specific time
   const handleSeek = (newTime: number) => {
     if (playerRef.current && playerRef.current.seekTo) {
       playerRef.current.seekTo(newTime);
@@ -98,14 +88,12 @@ const Index = () => {
     }
   };
 
-  // Handle track selection from playlist
   const handleSelectTrack = (index: number) => {
     setCurrentIndex(index);
     setCurrentTime(0);
     setIsPlaying(true);
   };
 
-  // Handle toggle favorite
   const handleToggleFavorite = () => {
     if (!currentVideo) return;
     
@@ -118,32 +106,20 @@ const Index = () => {
     }
   };
 
-  // Player reference for imperative commands
   const playerRef = useRef<any>(null);
 
-  // Add video to playlist
   const handleAddVideo = async (videoId: string) => {
-    // Check if video already exists in playlist
     if (playlist.some(video => video.id === videoId)) {
       toast.info("This video is already in your playlist");
       return;
     }
     
     try {
-      // For demo purposes, we're creating a placeholder entry with basic data
-      // In a real app, you would fetch video details from YouTube API
-      const newVideo: VideoDetails = {
-        id: videoId,
-        title: `YouTube Video (${videoId})`,
-        artist: 'Unknown Artist',
-        thumbnail: `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`,
-        duration: '0:00'
-      };
+      const videoDetails = await fetchVideoDetails(videoId);
       
-      setPlaylist([...playlist, newVideo]);
+      setPlaylist([...playlist, videoDetails]);
       toast.success('Video added to playlist');
       
-      // Play the new video immediately
       setCurrentIndex(playlist.length);
       setIsPlaying(true);
     } catch (error) {
@@ -152,15 +128,12 @@ const Index = () => {
     }
   };
 
-  // Handle player ready
   const handlePlayerReady = () => {
     setIsPlayerReady(true);
     
-    // Assign player ref for imperative methods
     if (playerRef.current !== null) return;
     
     try {
-      // Get reference to YT player for imperative controls
       if (window.YT && window.YT.get) {
         playerRef.current = window.YT.get(document.querySelector('iframe')?.id);
       }
@@ -169,23 +142,19 @@ const Index = () => {
     }
   };
 
-  // Handle time update
   const handleTimeUpdate = (currentTime: number, duration: number) => {
     setCurrentTime(currentTime);
     setDuration(duration);
 
-    // If time is at the end, play next track
     if (duration > 0 && currentTime >= duration - 0.5) {
       handleSkipNext();
     }
   };
 
-  // Handle player error
   const handlePlayerError = (error: any) => {
     console.error('YouTube player error:', error);
     toast.error('Error playing video. The video might be restricted or unavailable.');
     
-    // Skip to next track on error
     setTimeout(handleSkipNext, 2000);
   };
 
@@ -202,22 +171,18 @@ const Index = () => {
 
       <main className="flex-1 w-full max-w-5xl mx-auto">
         <div className="player-container backdrop-blur-sm">
-          {/* Player Header */}
           <div className="player-header">
             <div className="text-lg font-medium">Now Playing</div>
           </div>
 
           <div className="flex flex-col lg:flex-row gap-6 mt-6">
-            {/* Record player section */}
             <div className="lg:w-1/2 flex flex-col items-center">
               <div className="relative mb-6">
-                {/* Vinyl record */}
                 <VinylRecord 
                   isPlaying={isPlaying}
                   coverImage={currentVideo?.thumbnail}
                 />
                 
-                {/* Vinyl arm */}
                 <div 
                   className="vinyl-arm" 
                   style={{ transform: `rotate(${armPosition}deg)` }}
@@ -226,7 +191,6 @@ const Index = () => {
                 </div>
               </div>
 
-              {/* Song info */}
               {currentVideo && (
                 <div className="w-full text-center mb-6 animate-fade-in">
                   <h2 className="text-xl font-bold mb-1">{currentVideo.title}</h2>
@@ -234,7 +198,6 @@ const Index = () => {
                 </div>
               )}
 
-              {/* Player controls */}
               <PlayerControls 
                 isPlaying={isPlaying}
                 duration={duration}
@@ -250,9 +213,7 @@ const Index = () => {
               />
             </div>
 
-            {/* Playlist section */}
             <div className="lg:w-1/2">
-              {/* Mobile playlist toggle */}
               {isMobile && (
                 <button 
                   className="w-full py-2 mb-4 text-center bg-gray-100 rounded-lg font-medium"
@@ -267,7 +228,6 @@ const Index = () => {
                   <div className="flex justify-between items-center mb-4">
                     <h3 className="text-lg font-semibold">Your Playlist</h3>
                     
-                    {/* Search bar */}
                     <div className="relative w-44 sm:w-64">
                       <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                       <Input
@@ -280,10 +240,8 @@ const Index = () => {
                     </div>
                   </div>
 
-                  {/* YouTube URL input */}
                   <YouTubeInput onVideoAdd={handleAddVideo} />
 
-                  {/* Playlist */}
                   <div className="overflow-y-auto max-h-[400px] pr-1 rounded-lg">
                     {filteredPlaylist.length > 0 ? (
                       filteredPlaylist.map((video, index) => (
@@ -308,7 +266,6 @@ const Index = () => {
         </div>
       </main>
 
-      {/* Hidden YouTube player */}
       {currentVideo && (
         <YouTubePlayer
           videoId={currentVideo.id}

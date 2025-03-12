@@ -60,3 +60,49 @@ export const formatTime = (seconds: number): string => {
   
   return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
 };
+
+// Fetch video details from YouTube's oEmbed API
+export const fetchVideoDetails = async (videoId: string): Promise<VideoDetails> => {
+  try {
+    // Use YouTube's oEmbed API to get video information
+    const response = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`);
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch video details');
+    }
+    
+    const data = await response.json();
+    
+    // Extract author and title
+    let title = data.title;
+    let artist = data.author_name || 'Unknown Artist';
+    
+    // Often YouTube titles include artist - title format, try to parse it
+    if (title.includes(' - ')) {
+      const parts = title.split(' - ');
+      if (parts.length >= 2) {
+        artist = parts[0].trim();
+        title = parts.slice(1).join(' - ').trim();
+      }
+    }
+    
+    // Create the video details
+    return {
+      id: videoId,
+      title: title,
+      artist: artist,
+      thumbnail: `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`,
+      duration: '0:00' // We can't get duration from oEmbed, will be updated when played
+    };
+  } catch (error) {
+    console.error('Error fetching video details:', error);
+    // Return a basic object if we can't fetch details
+    return {
+      id: videoId,
+      title: 'YouTube Video',
+      artist: 'Unknown Artist',
+      thumbnail: `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`,
+      duration: '0:00'
+    };
+  }
+};
