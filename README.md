@@ -64,6 +64,32 @@ npm install
 npm run dev
 ```
 
+## Deployment
+
+### Deploy to Vercel
+
+This project is configured for easy deployment to Vercel:
+
+1. Fork or clone this repository to your GitHub account
+2. Visit [Vercel](https://vercel.com) and sign up or log in
+3. Click "New Project" and import your GitHub repository
+4. Vercel will automatically detect the project configuration
+5. Click "Deploy" and wait for the build to complete
+6. Your site will be live at a Vercel URL (e.g., your-project.vercel.app)
+
+You can also deploy directly from the command line:
+
+```bash
+# Install Vercel CLI
+npm install -g vercel
+
+# Login to Vercel
+vercel login
+
+# Deploy from your project directory
+vercel
+```
+
 ## Mobile App Development
 
 A mobile version of this application is currently in development. The upcoming mobile app will:
@@ -84,3 +110,4 @@ MIT
 
 - YouTube API for video playback
 - All the artists whose music brings this vinyl experience to life
+- [Vercel](https://vercel.com) for hosting and deployment
