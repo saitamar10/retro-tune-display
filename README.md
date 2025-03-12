@@ -1,69 +1,86 @@
-# Welcome to your Lovable project
 
-## Project info
+# Retro Vinyl YouTube Player
 
-**URL**: https://lovable.dev/projects/0e7926cd-aede-4681-863f-2aa1e387fd96
+[![Lovable Project](https://img.shields.io/badge/Made%20with-Lovable-ff69b4)](https://lovable.dev/projects/0e7926cd-aede-4681-863f-2aa1e387fd96)
 
-## How can I edit this code?
+A nostalgic music player that transforms YouTube videos into a retro vinyl record experience. Watch as your favorite songs play on a virtual vinyl record with realistic animations and a vintage aesthetic.
 
-There are several ways of editing your application.
+![Vinyl Player Screenshot](https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg)
 
-**Use Lovable**
+## Features
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/0e7926cd-aede-4681-863f-2aa1e387fd96) and start prompting.
+- **Vinyl Record Simulation**: Watch YouTube videos play as if they were on a vinyl record with realistic spinning animation
+- **Playlist Management**: Create and manage your own playlist of YouTube videos
+- **Search Functionality**: Easily find songs in your playlist
+- **Favorites System**: Mark your favorite tracks for quick access
+- **Responsive Design**: Works on desktop and mobile browsers
 
-Changes made via Lovable will be committed automatically to this repo.
+## How It Works
 
-**Use your preferred IDE**
+Simply paste a YouTube video URL into the input field, and the app will:
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+1. Extract the video ID
+2. Fetch the video metadata (title, artist)
+3. Add it to your playlist
+4. Display it as a vinyl record when played
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+The audio comes directly from YouTube while the visual experience mimics the nostalgic feel of vinyl records.
 
-Follow these steps:
+## Upcoming Features
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+We're actively developing this project with plans to:
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+- Create a dedicated mobile application for iOS and Android
+- Enhance the user interface with more retro-inspired elements
+- Add custom vinyl record designs and animations
+- Implement offline playback capabilities
+- Integrate with music streaming services
 
-# Step 3: Install the necessary dependencies.
-npm i
+## Technologies Used
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+- React
+- TypeScript
+- Tailwind CSS
+- shadcn/ui components
+- YouTube oEmbed API
+
+## Development
+
+This project is built using [Lovable](https://lovable.dev), an AI-powered web application development platform.
+
+To run the project locally:
+
+```bash
+# Clone the repository
+git clone <repository-url>
+
+# Navigate to the project directory
+cd retro-vinyl-player
+
+# Install dependencies
+npm install
+
+# Start the development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## Mobile App Development
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+A mobile version of this application is currently in development. The upcoming mobile app will:
 
-**Use GitHub Codespaces**
+- Provide a native experience on iOS and Android
+- Feature enhanced offline capabilities
+- Include gesture controls for a more tactile vinyl experience
+- Offer improved background playback
+- Support home screen widgets for quick access
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Stay tuned for updates on the mobile app release!
 
-## What technologies are used for this project?
+## License
 
-This project is built with .
+MIT
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Acknowledgements
 
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/0e7926cd-aede-4681-863f-2aa1e387fd96) and click on Share -> Publish.
-
-## I want to use a custom domain - is that possible?
-
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+- YouTube API for video playback
+- All the artists whose music brings this vinyl experience to life
