@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -210,7 +211,7 @@ const Index = () => {
         <Button 
           variant="ghost" 
           className="mr-4 text-white hover:bg-white/10" 
-          onClick={() => navigate('/')}
+          onClick={handleBackToHome}
         >
           <ArrowLeft className="h-5 w-5" />
         </Button>
@@ -225,14 +226,14 @@ const Index = () => {
       </header>
 
       <main className="flex-1 w-full max-w-5xl mx-auto">
-        <div className="player-container backdrop-blur-sm bg-black/40 border border-white/10 shadow-2xl">
-          <div className="player-header bg-vinyl-primary">
+        <div className="player-container backdrop-blur-sm bg-black/40 border border-white/10 shadow-2xl rounded-xl p-6">
+          <div className="player-header border-b border-white/10 pb-4 mb-6">
             <div className="text-lg font-medium">Now Playing</div>
           </div>
 
-          <div className="flex flex-col lg:flex-row gap-6 mt-6">
+          <div className="flex flex-col lg:flex-row gap-6">
             <div className="lg:w-1/2 flex flex-col items-center">
-              <div className="relative mb-6">
+              <div className="relative mb-6 vinyl-player-area">
                 <VinylRecord 
                   isPlaying={isPlaying}
                   coverImage={currentVideo?.thumbnail}
@@ -339,6 +340,172 @@ const Index = () => {
           onError={handlePlayerError}
         />
       )}
+
+      <style jsx>{`
+        .vinyl-player-area {
+          position: relative;
+          width: 100%;
+          max-width: 320px;
+          aspect-ratio: 1;
+        }
+        
+        .vinyl-arm {
+          position: absolute;
+          top: 30px;
+          right: 10px;
+          width: 120px;
+          height: 20px;
+          background-color: #444;
+          border-radius: 4px;
+          transform-origin: right center;
+          transition: transform 1s ease;
+          z-index: 10;
+        }
+        
+        .vinyl-arm-needle {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 20px;
+          height: 6px;
+          background-color: #999;
+          border-radius: 2px;
+          transform: translateY(-50%);
+        }
+        
+        .player-container {
+          display: flex;
+          flex-direction: column;
+          border-radius: 16px;
+          overflow: hidden;
+        }
+        
+        .vinyl-playlist {
+          scrollbar-width: thin;
+          scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+        }
+        
+        .vinyl-playlist::-webkit-scrollbar {
+          width: 6px;
+        }
+        
+        .vinyl-playlist::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        
+        .vinyl-playlist::-webkit-scrollbar-thumb {
+          background-color: rgba(255, 255, 255, 0.2);
+          border-radius: 3px;
+        }
+        
+        @keyframes spin-vinyl {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes spin-vinyl-pause {
+          to { transform: rotate(0); }
+        }
+        
+        .animate-spin-vinyl {
+          animation: spin-vinyl linear infinite;
+        }
+        
+        .animate-spin-vinyl-pause {
+          animation: spin-vinyl-pause 0.2s ease forwards;
+        }
+        
+        .animate-fade-in {
+          animation: fade-in 0.3s ease-in;
+        }
+        
+        @keyframes fade-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        
+        .progress-bar {
+          position: relative;
+          height: 6px;
+          background-color: rgba(255, 255, 255, 0.1);
+          border-radius: 3px;
+          overflow: hidden;
+        }
+        
+        .progress-bar-fill {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100%;
+          background-color: #ffffff;
+          border-radius: 3px;
+          transition: width 0.1s linear;
+        }
+        
+        .progress-bar-thumb {
+          position: absolute;
+          top: 50%;
+          width: 12px;
+          height: 12px;
+          background-color: #ffffff;
+          border-radius: 50%;
+          transform: translate(-50%, -50%);
+          opacity: 0;
+          transition: opacity 0.2s;
+        }
+        
+        .progress-bar:hover .progress-bar-thumb {
+          opacity: 1;
+        }
+        
+        .control-button-primary-new {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: rgba(255, 255, 255, 0.9);
+          color: black;
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          transition: all 0.2s;
+        }
+        
+        .control-button-primary-new:hover {
+          background-color: white;
+          transform: scale(1.05);
+        }
+        
+        .control-button-minimal {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: rgba(255, 255, 255, 0.7);
+          background: transparent;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          transition: all 0.2s;
+        }
+        
+        .control-button-minimal:hover {
+          color: white;
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .minimal-button {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: transparent;
+          padding: 8px;
+          border-radius: 50%;
+          transition: all 0.2s;
+        }
+        
+        .minimal-button:hover {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+      `}</style>
     </div>
   );
 };
