@@ -63,7 +63,7 @@ const VinylRecord: React.FC<VinylRecordProps> = ({
         <div className="vinyl-spindle"></div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .vinyl-container {
           position: relative;
           width: 280px;

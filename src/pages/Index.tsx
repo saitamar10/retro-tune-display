@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -23,7 +22,7 @@ const Index = () => {
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(0.7);
   const [isPlayerReady, setIsPlayerReady] = useState(false);
-  const [favorites, setFavorites] = useState<string[]>([]); // Array of video IDs
+  const [favorites, setFavorites] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [showPlaylist, setShowPlaylist] = useState(true);
   const [armPosition, setArmPosition] = useState(-45);
@@ -341,7 +340,7 @@ const Index = () => {
         />
       )}
 
-      <style jsx>{`
+      <style>{`
         .vinyl-player-area {
           position: relative;
           width: 100%;
