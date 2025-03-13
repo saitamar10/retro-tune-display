@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import { Search, ArrowLeft } from 'lucide-react';
+import { Search, ArrowLeft, Play } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Table, TableHeader, TableRow, TableHead, TableBody } from '@/components/ui/table';
 import { VideoDetails, defaultVideos, formatTime, fetchVideoDetails } from '@/services/youtubeService';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import VinylRecord from '@/components/VinylRecord';
 import PlayerControls from '@/components/PlayerControls';
 import PlaylistItem from '@/components/PlaylistItem';
@@ -301,23 +303,65 @@ const Index = () => {
                   </div>
 
                   <YouTubeInput onVideoAdd={handleAddVideo} />
-
-                  <div className="overflow-y-auto max-h-[400px] pr-1 rounded-lg vinyl-playlist">
-                    {filteredPlaylist.length > 0 ? (
-                      filteredPlaylist.map((video, index) => (
-                        <PlaylistItem
-                          key={video.id}
-                          video={video}
-                          isActive={index === currentIndex}
-                          isPlaying={isPlaying && index === currentIndex}
-                          onClick={() => handleSelectTrack(playlist.indexOf(video))}
-                        />
-                      ))
-                    ) : (
-                      <div className="text-center py-8 text-gray-400">
-                        {searchTerm ? 'No results found' : 'Your playlist is empty'}
-                      </div>
-                    )}
+                  
+                  <div className="bg-black/30 rounded-lg overflow-hidden border border-white/10">
+                    <div className="flex items-center p-3 bg-[#8b5cf6]/20 border-b border-white/10">
+                      <button className="flex items-center justify-center gap-2 px-4 py-1.5 rounded-full bg-[#8b5cf6]/20 hover:bg-[#8b5cf6]/30 transition-colors">
+                        <Play size={14} />
+                        <span className="text-sm font-medium">Play All</span>
+                      </button>
+                    </div>
+                    
+                    <ScrollArea className="h-[400px]">
+                      {filteredPlaylist.length > 0 ? (
+                        filteredPlaylist.map((video, index) => (
+                          <PlaylistItem
+                            key={video.id}
+                            video={video}
+                            isActive={playlist.indexOf(video) === currentIndex}
+                            isPlaying={isPlaying && playlist.indexOf(video) === currentIndex}
+                            onClick={() => handleSelectTrack(playlist.indexOf(video))}
+                            index={index}
+                            isFavorite={favorites.includes(video.id)}
+                            onToggleFavorite={() => {
+                              if (favorites.includes(video.id)) {
+                                setFavorites(favorites.filter(id => id !== video.id));
+                                toast.info(`Removed from favorites`);
+                              } else {
+                                setFavorites([...favorites, video.id]);
+                                toast.success(`Added to favorites`);
+                              }
+                            }}
+                            onRemove={() => {
+                              const videoIndex = playlist.indexOf(video);
+                              const newPlaylist = [...playlist];
+                              newPlaylist.splice(videoIndex, 1);
+                              
+                              if (newPlaylist.length === 0) {
+                                setPlaylist([...defaultVideos]);
+                                setCurrentIndex(0);
+                                setIsPlaying(false);
+                              } else {
+                                setPlaylist(newPlaylist);
+                                if (videoIndex === currentIndex) {
+                                  if (videoIndex === newPlaylist.length) {
+                                    setCurrentIndex(0);
+                                  }
+                                } else if (videoIndex < currentIndex) {
+                                  setCurrentIndex(currentIndex - 1);
+                                }
+                              }
+                              
+                              toast.info('Removed from playlist');
+                            }}
+                          />
+                        ))
+                      ) : (
+                        <div className="text-center py-8 text-gray-400">
+                          {searchTerm ? 'No results found' : 'Your playlist is empty'}
+                        </div>
+                      )}
+                    </ScrollArea>
                   </div>
                 </>
               )}
