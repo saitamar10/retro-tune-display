@@ -21,7 +21,7 @@ const VinylRecord: React.FC<VinylRecordProps> = ({
 
   const handleImageError = () => {
     // Fallback to a default vinyl image
-    setImageSrc('/lovable-uploads/4f2df6ea-ea19-44fa-82b4-0ac49cee3d64.png');
+    setImageSrc('/lovable-uploads/ec176b61-13ac-4e82-8e86-577b4765fd45.png');
   };
 
   return (
@@ -38,6 +38,9 @@ const VinylRecord: React.FC<VinylRecordProps> = ({
           backgroundPosition: 'center'
         }}
       >
+        {/* Minimalist design overlay for the vinyl record */}
+        <div className="vinyl-design"></div>
+        
         {/* Vinyl record grooves effect - enhanced for better visuals */}
         <div className="vinyl-grooves"></div>
         
@@ -50,7 +53,7 @@ const VinylRecord: React.FC<VinylRecordProps> = ({
             <img 
               src={imageSrc} 
               alt="Album art" 
-              className="w-full h-full rounded-full object-cover"
+              className="w-full h-full rounded-full object-cover opacity-80"
               onError={handleImageError}
             />
           )}

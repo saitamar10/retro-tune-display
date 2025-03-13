@@ -49,12 +49,12 @@ const YouTubeInput: React.FC<YouTubeInputProps> = ({ onVideoAdd }) => {
         placeholder="Paste YouTube URL here..."
         value={youtubeUrl}
         onChange={(e) => setYoutubeUrl(e.target.value)}
-        className="flex-1 bg-black/20 border-white/20 text-white placeholder:text-gray-500"
+        className="flex-1 bg-black/10 border-gray-700/30 text-white placeholder:text-gray-500 rounded-full"
       />
       <Button 
         type="submit" 
         disabled={isLoading}
-        className="bg-vinyl-primary hover:bg-vinyl-primary/90"
+        className="bg-gray-700/50 hover:bg-gray-600/50 rounded-full text-sm px-4"
       >
         Add
       </Button>

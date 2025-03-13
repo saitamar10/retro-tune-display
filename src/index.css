@@ -142,18 +142,26 @@
     @apply absolute inset-0 rounded-full opacity-60;
     background: repeating-radial-gradient(
       circle,
-      rgba(0, 0, 0, 0.2) 0px,
-      rgba(0, 0, 0, 0.3) 1px,
+      rgba(0, 0, 0, 0.3) 0px,
+      rgba(0, 0, 0, 0.4) 1px,
       transparent 1px,
       transparent 4px
     );
+  }
+  
+  .vinyl-design {
+    @apply absolute inset-0 rounded-full;
+    background-image: url('/lovable-uploads/ec176b61-13ac-4e82-8e86-577b4765fd45.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.9;
   }
 
   .vinyl-reflection {
     @apply absolute inset-0 rounded-full opacity-20;
     background: linear-gradient(
       135deg,
-      rgba(255, 255, 255, 0.4) 0%,
+      rgba(255, 255, 255, 0.3) 0%,
       rgba(255, 255, 255, 0) 50%,
       rgba(255, 255, 255, 0) 100%
     );
@@ -162,10 +170,12 @@
   .player-container {
     @apply relative w-full max-w-5xl mx-auto rounded-xl p-4 md:p-6 shadow-lg overflow-hidden;
     backdrop-filter: blur(10px);
+    background: linear-gradient(to bottom, rgba(45, 45, 45, 0.8), rgba(25, 25, 25, 0.9));
   }
 
   .player-header {
     @apply flex items-center justify-between w-full py-3 px-4 text-white rounded-lg;
+    background: linear-gradient(to right, rgba(60, 60, 60, 0.6), rgba(40, 40, 40, 0.6));
   }
 
   .player-controls {
@@ -179,21 +189,33 @@
   .control-button-primary {
     @apply bg-vinyl-primary text-white hover:bg-vinyl-primary/90 h-16 w-16 shadow-md;
   }
+  
+  .control-button-primary-new {
+    @apply bg-violet-600 text-white hover:bg-violet-500 h-12 w-12 flex items-center justify-center rounded-full shadow-md;
+  }
 
   .control-button-secondary {
     @apply bg-vinyl-dark/70 text-vinyl-accent hover:bg-vinyl-dark h-12 w-12;
   }
+  
+  .control-button-minimal {
+    @apply text-gray-400 hover:text-white transition-colors;
+  }
+  
+  .minimal-button {
+    @apply flex items-center justify-center h-8 w-8 rounded-full transition-colors;
+  }
 
   .progress-bar {
-    @apply relative h-2 bg-gray-800 rounded-full overflow-hidden transition-all duration-300;
+    @apply relative h-1.5 bg-gray-800/70 rounded-full overflow-hidden transition-all duration-300;
   }
 
   .progress-bar-fill {
-    @apply absolute h-full bg-vinyl-primary rounded-full transition-all duration-300;
+    @apply absolute h-full bg-violet-600 rounded-full transition-all duration-300;
   }
 
   .progress-bar-thumb {
-    @apply absolute h-3 w-3 bg-white border-2 border-vinyl-primary rounded-full -translate-y-1/4 transition-all duration-300 opacity-0 group-hover:opacity-100;
+    @apply absolute h-3 w-3 bg-white border-2 border-violet-600 rounded-full -translate-y-1/4 transition-all duration-300 opacity-0 group-hover:opacity-100;
     top: 50%;
   }
 
@@ -244,6 +266,6 @@
   }
 
   .vinyl-playlist {
-    @apply bg-black/20 p-2 rounded-lg border border-white/10;
+    @apply bg-black/20 p-2 rounded-lg border border-white/5;
   }
 }

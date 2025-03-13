@@ -78,9 +78,14 @@ const PlayerControls: React.FC<PlayerControlsProps> = ({
 
   return (
     <div className="w-full animate-fade-in">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-xs text-gray-400">{formatTime(currentTime)}</span>
+        <span className="text-xs text-gray-400">{formatTime(duration)}</span>
+      </div>
+      
       {/* Progress bar */}
       <div 
-        className="progress-bar my-4 cursor-pointer group"
+        className="progress-bar mb-6 cursor-pointer group"
         onClick={handleProgressClick}
       >
         <div 
@@ -93,54 +98,43 @@ const PlayerControls: React.FC<PlayerControlsProps> = ({
         ></div>
       </div>
 
-      {/* Time indicators */}
-      <div className="flex justify-between text-xs text-gray-400 mb-4 px-1">
-        <span>{formatTime(currentTime)}</span>
-        <span>{formatTime(duration)}</span>
-      </div>
-
       {/* Main controls */}
-      <div className="player-controls">
-        {/* Previous button */}
+      <div className="flex justify-center space-x-6 mb-6">
         <button
           onClick={onSkipPrevious}
-          className="control-button control-button-secondary"
+          className="control-button-minimal"
           aria-label="Previous track"
         >
           <SkipBack size={22} />
         </button>
 
-        {/* Seek backward button */}
         <button
           onClick={handleSeekBackward}
-          className="control-button control-button-secondary"
+          className="control-button-minimal"
           aria-label="Seek backward"
         >
           <Rewind size={18} />
         </button>
 
-        {/* Play/Pause button */}
         <button
           onClick={onPlayPause}
-          className="control-button control-button-primary"
+          className="control-button-primary-new"
           aria-label={isPlaying ? "Pause" : "Play"}
         >
-          {isPlaying ? <Pause size={30} /> : <Play size={30} className="ml-1" />}
+          {isPlaying ? <Pause size={24} /> : <Play size={24} className="ml-1" />}
         </button>
 
-        {/* Seek forward button */}
         <button
           onClick={handleSeekForward}
-          className="control-button control-button-secondary"
+          className="control-button-minimal"
           aria-label="Seek forward"
         >
           <FastForward size={18} />
         </button>
 
-        {/* Next button */}
         <button
           onClick={onSkipNext}
-          className="control-button control-button-secondary"
+          className="control-button-minimal"
           aria-label="Next track"
         >
           <SkipForward size={22} />
@@ -148,10 +142,10 @@ const PlayerControls: React.FC<PlayerControlsProps> = ({
       </div>
 
       {/* Secondary controls */}
-      <div className="flex flex-col gap-4 mt-6">
+      <div className="flex flex-col gap-4 mt-4">
         {/* Volume control */}
-        <div className="flex items-center gap-3 px-2">
-          <Volume2 size={16} className="text-vinyl-accent shrink-0" />
+        <div className="flex items-center gap-3 px-2 mb-2">
+          <Volume2 size={14} className="text-gray-400 shrink-0" />
           <Slider
             defaultValue={[volume]}
             value={[volume]}
@@ -163,10 +157,10 @@ const PlayerControls: React.FC<PlayerControlsProps> = ({
           <span className="text-xs text-gray-400 w-8 text-right">{Math.round(volume * 100)}%</span>
         </div>
 
-        {/* Rotation speed control - new feature */}
+        {/* Rotation speed control */}
         {onRotationSpeedChange && (
           <div className="flex items-center gap-3 px-2">
-            <RotateCcw size={16} className="text-vinyl-accent shrink-0" />
+            <RotateCcw size={14} className="text-gray-400 shrink-0" />
             <Slider
               defaultValue={[rotationSpeed]}
               value={[rotationSpeed]}
@@ -176,32 +170,32 @@ const PlayerControls: React.FC<PlayerControlsProps> = ({
               onValueChange={handleRotationSpeedChange}
               className="w-full"
             />
-            <RotateCw size={16} className="text-vinyl-accent shrink-0" />
+            <RotateCw size={14} className="text-gray-400 shrink-0" />
           </div>
         )}
 
         {/* Additional controls row */}
-        <div className="flex justify-between items-center px-2 mt-2">
+        <div className="flex justify-center gap-4 mt-3">
           {/* Favorite button */}
           {onToggleFavorite && (
             <button
               onClick={onToggleFavorite}
               className={cn(
-                "flex items-center justify-center h-8 w-8 rounded-full transition-colors",
-                isFavorite ? "text-red-500" : "text-gray-400 hover:text-gray-300"
+                "minimal-button",
+                isFavorite ? "text-red-400" : "text-gray-400 hover:text-gray-300"
               )}
               aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
             >
-              <Heart size={18} fill={isFavorite ? "currentColor" : "none"} />
+              <Heart size={16} fill={isFavorite ? "currentColor" : "none"} />
             </button>
           )}
           
           {/* Settings button - for future functionality */}
           <button
-            className="flex items-center justify-center h-8 w-8 rounded-full text-gray-400 hover:text-gray-300 transition-colors"
+            className="minimal-button text-gray-400 hover:text-gray-300"
             aria-label="Playback settings"
           >
-            <Sliders size={18} />
+            <Sliders size={16} />
           </button>
         </div>
       </div>
