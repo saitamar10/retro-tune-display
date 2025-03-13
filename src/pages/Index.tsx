@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -27,6 +26,7 @@ const Index = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showPlaylist, setShowPlaylist] = useState(true);
   const [armPosition, setArmPosition] = useState(-45);
+  const [rotationSpeed, setRotationSpeed] = useState(8);
   const isMobile = useIsMobile();
   
   const currentVideo = playlist[currentIndex];
@@ -35,23 +35,19 @@ const Index = () => {
     video.artist.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Handle videoId from URL parameter
   useEffect(() => {
     const loadVideoFromUrl = async () => {
       if (videoId) {
-        // Check if video is already in playlist
         const existingIndex = playlist.findIndex(video => video.id === videoId);
         
         if (existingIndex !== -1) {
-          // Video exists in playlist, set it as current
           setCurrentIndex(existingIndex);
           setIsPlaying(true);
         } else {
-          // Video not in playlist, fetch and add it
           try {
             const videoDetails = await fetchVideoDetails(videoId);
             setPlaylist([...playlist, videoDetails]);
-            setCurrentIndex(playlist.length); // Index of the newly added video
+            setCurrentIndex(playlist.length);
             setIsPlaying(true);
           } catch (error) {
             console.error('Error fetching video details:', error);
@@ -122,6 +118,14 @@ const Index = () => {
     }
   };
 
+  const handleSeekForward = () => {
+    handleSeek(Math.min(currentTime + 10, duration));
+  };
+
+  const handleSeekBackward = () => {
+    handleSeek(Math.max(currentTime - 10, 0));
+  };
+
   const handleSelectTrack = (index: number) => {
     setCurrentIndex(index);
     setCurrentTime(0);
@@ -138,6 +142,10 @@ const Index = () => {
       setFavorites([...favorites, currentVideo.id]);
       toast.success(`Added to favorites`);
     }
+  };
+
+  const handleRotationSpeedChange = (speed: number) => {
+    setRotationSpeed(speed);
   };
 
   const playerRef = useRef<any>(null);
@@ -202,7 +210,7 @@ const Index = () => {
         <Button 
           variant="ghost" 
           className="mr-4 text-white hover:bg-white/10" 
-          onClick={handleBackToHome}
+          onClick={() => navigate('/')}
         >
           <ArrowLeft className="h-5 w-5" />
         </Button>
@@ -217,8 +225,8 @@ const Index = () => {
       </header>
 
       <main className="flex-1 w-full max-w-5xl mx-auto">
-        <div className="player-container backdrop-blur-sm bg-white/5 border border-white/10">
-          <div className="player-header">
+        <div className="player-container backdrop-blur-sm bg-black/40 border border-white/10 shadow-2xl">
+          <div className="player-header bg-vinyl-primary">
             <div className="text-lg font-medium">Now Playing</div>
           </div>
 
@@ -228,6 +236,7 @@ const Index = () => {
                 <VinylRecord 
                   isPlaying={isPlaying}
                   coverImage={currentVideo?.thumbnail}
+                  rotationSpeed={rotationSpeed}
                 />
                 
                 <div 
@@ -257,6 +266,10 @@ const Index = () => {
                 onVolumeChange={setVolume}
                 isFavorite={currentVideo ? favorites.includes(currentVideo.id) : false}
                 onToggleFavorite={handleToggleFavorite}
+                rotationSpeed={rotationSpeed}
+                onRotationSpeedChange={handleRotationSpeedChange}
+                onSeekForward={handleSeekForward}
+                onSeekBackward={handleSeekBackward}
               />
             </div>
 
@@ -282,14 +295,14 @@ const Index = () => {
                         placeholder="Search..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-8 h-9 bg-white/10 border-white/20 text-white"
+                        className="pl-8 h-9 bg-black/20 border-white/20 text-white"
                       />
                     </div>
                   </div>
 
                   <YouTubeInput onVideoAdd={handleAddVideo} />
 
-                  <div className="overflow-y-auto max-h-[400px] pr-1 rounded-lg">
+                  <div className="overflow-y-auto max-h-[400px] pr-1 rounded-lg vinyl-playlist">
                     {filteredPlaylist.length > 0 ? (
                       filteredPlaylist.map((video, index) => (
                         <PlaylistItem

@@ -117,16 +117,17 @@
 
 @layer components {
   .vinyl-container {
-    @apply relative w-72 h-72 rounded-full bg-black overflow-hidden;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    @apply relative w-72 h-72 rounded-full bg-black overflow-hidden shadow-lg;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   }
   
   .vinyl-label {
-    @apply absolute inset-0 z-10 rounded-full flex items-center justify-center;
+    @apply absolute inset-0 z-10 rounded-full flex items-center justify-center shadow-inner;
     width: 35%;
     height: 35%;
     margin: auto;
     background: radial-gradient(circle, #f0f0f0 0%, #e0e0e0 100%);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   }
 
   .vinyl-spindle {
@@ -134,10 +135,11 @@
     width: 5%;
     height: 5%;
     margin: auto;
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.3);
   }
 
   .vinyl-grooves {
-    @apply absolute inset-0 rounded-full opacity-50;
+    @apply absolute inset-0 rounded-full opacity-60;
     background: repeating-radial-gradient(
       circle,
       rgba(0, 0, 0, 0.2) 0px,
@@ -147,18 +149,27 @@
     );
   }
 
+  .vinyl-reflection {
+    @apply absolute inset-0 rounded-full opacity-20;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.4) 0%,
+      rgba(255, 255, 255, 0) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+  }
+
   .player-container {
-    @apply relative w-full max-w-5xl mx-auto bg-white rounded-xl p-4 md:p-6 shadow-lg overflow-hidden;
-    background: linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(240,240,245,0.95));
+    @apply relative w-full max-w-5xl mx-auto rounded-xl p-4 md:p-6 shadow-lg overflow-hidden;
     backdrop-filter: blur(10px);
   }
 
   .player-header {
-    @apply flex items-center justify-between w-full py-3 px-4 bg-vinyl-primary text-white rounded-lg;
+    @apply flex items-center justify-between w-full py-3 px-4 text-white rounded-lg;
   }
 
   .player-controls {
-    @apply flex items-center justify-center gap-4 p-4;
+    @apply flex items-center justify-center gap-4 p-2;
   }
 
   .control-button {
@@ -166,15 +177,15 @@
   }
 
   .control-button-primary {
-    @apply bg-vinyl-primary text-white hover:bg-opacity-90 h-16 w-16 shadow-md;
+    @apply bg-vinyl-primary text-white hover:bg-vinyl-primary/90 h-16 w-16 shadow-md;
   }
 
   .control-button-secondary {
-    @apply bg-vinyl-light text-vinyl-primary hover:bg-opacity-90 h-12 w-12;
+    @apply bg-vinyl-dark/70 text-vinyl-accent hover:bg-vinyl-dark h-12 w-12;
   }
 
   .progress-bar {
-    @apply relative h-1.5 bg-gray-200 rounded-full overflow-hidden transition-all duration-300;
+    @apply relative h-2 bg-gray-800 rounded-full overflow-hidden transition-all duration-300;
   }
 
   .progress-bar-fill {
@@ -182,7 +193,7 @@
   }
 
   .progress-bar-thumb {
-    @apply absolute h-3 w-3 bg-white border-2 border-vinyl-primary rounded-full -translate-y-1/4 transition-all duration-300;
+    @apply absolute h-3 w-3 bg-white border-2 border-vinyl-primary rounded-full -translate-y-1/4 transition-all duration-300 opacity-0 group-hover:opacity-100;
     top: 50%;
   }
 
@@ -204,27 +215,35 @@
 
   .vinyl-arm {
     @apply absolute h-80 w-4 origin-bottom-left transform transition-all duration-500 ease-in-out;
-    background: linear-gradient(to right, #555, #777, #555);
+    background: linear-gradient(to right, #444, #666, #444);
     border-radius: 4px;
     bottom: 0;
     left: 75%;
     transform-origin: bottom;
     z-index: 40;
+    box-shadow: -1px 2px 4px rgba(0, 0, 0, 0.3);
   }
 
   .vinyl-arm::after {
     content: '';
-    @apply absolute w-8 h-6 rounded-sm bg-gray-500;
+    @apply absolute w-8 h-6 rounded-sm;
     top: 0;
     left: -2px;
     transform: translateY(-50%) rotate(0deg);
+    background: linear-gradient(to bottom, #555, #777);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   }
 
   .vinyl-arm-needle {
-    @apply absolute w-1 h-10 bg-gray-400;
+    @apply absolute w-1 h-10;
     bottom: 0;
     left: 1.5px;
     transform-origin: bottom;
     transform: rotate(-45deg);
+    background: linear-gradient(to bottom, #999, #ccc);
+  }
+
+  .vinyl-playlist {
+    @apply bg-black/20 p-2 rounded-lg border border-white/10;
   }
 }

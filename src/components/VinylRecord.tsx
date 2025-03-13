@@ -38,8 +38,11 @@ const VinylRecord: React.FC<VinylRecordProps> = ({
           backgroundPosition: 'center'
         }}
       >
-        {/* Vinyl record grooves effect */}
+        {/* Vinyl record grooves effect - enhanced for better visuals */}
         <div className="vinyl-grooves"></div>
+        
+        {/* Enhanced reflective effect */}
+        <div className="vinyl-reflection"></div>
         
         {/* Center label of the vinyl */}
         <div className="vinyl-label">
