@@ -22,8 +22,8 @@ const PlaylistItem: React.FC<PlaylistItemProps> = ({
       className={cn(
         "flex items-center gap-3 p-3 rounded-lg transition-all duration-200 cursor-pointer group",
         isActive 
-          ? "bg-vinyl-primary bg-opacity-10 hover:bg-opacity-20" 
-          : "hover:bg-gray-100"
+          ? "bg-vinyl-primary bg-opacity-30 hover:bg-opacity-40" 
+          : "hover:bg-white/10"
       )}
       onClick={onClick}
     >
@@ -51,11 +51,11 @@ const PlaylistItem: React.FC<PlaylistItemProps> = ({
       <div className="flex-1 min-w-0">
         <h3 className={cn(
           "text-sm font-medium truncate",
-          isActive ? "text-vinyl-primary" : "text-gray-800"
+          isActive ? "text-vinyl-primary" : "text-white"
         )}>
           {video.title}
         </h3>
-        <p className="text-xs text-gray-500 truncate">{video.artist}</p>
+        <p className="text-xs text-gray-400 truncate">{video.artist}</p>
       </div>
 
       {/* Duration */}

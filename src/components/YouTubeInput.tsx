@@ -34,7 +34,6 @@ const YouTubeInput: React.FC<YouTubeInputProps> = ({ onVideoAdd }) => {
       
       onVideoAdd(videoId);
       setYoutubeUrl('');
-      toast.success('Video added to playlist');
     } catch (error) {
       toast.error('Failed to add video');
       console.error('Error adding video:', error);
@@ -50,7 +49,7 @@ const YouTubeInput: React.FC<YouTubeInputProps> = ({ onVideoAdd }) => {
         placeholder="Paste YouTube URL here..."
         value={youtubeUrl}
         onChange={(e) => setYoutubeUrl(e.target.value)}
-        className="flex-1"
+        className="flex-1 bg-white/10 border-white/20 text-white"
       />
       <Button 
         type="submit" 

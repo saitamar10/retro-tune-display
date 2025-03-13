@@ -1,7 +1,10 @@
+
 import React, { useState, useEffect, useRef } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import { Search } from 'lucide-react';
+import { Search, ArrowLeft } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import { VideoDetails, defaultVideos, formatTime, fetchVideoDetails } from '@/services/youtubeService';
 import VinylRecord from '@/components/VinylRecord';
 import PlayerControls from '@/components/PlayerControls';
@@ -11,6 +14,8 @@ import YouTubePlayer from '@/components/YouTubePlayer';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 const Index = () => {
+  const { videoId } = useParams<{ videoId?: string }>();
+  const navigate = useNavigate();
   const [playlist, setPlaylist] = useState<VideoDetails[]>([...defaultVideos]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -29,6 +34,35 @@ const Index = () => {
     video.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
     video.artist.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // Handle videoId from URL parameter
+  useEffect(() => {
+    const loadVideoFromUrl = async () => {
+      if (videoId) {
+        // Check if video is already in playlist
+        const existingIndex = playlist.findIndex(video => video.id === videoId);
+        
+        if (existingIndex !== -1) {
+          // Video exists in playlist, set it as current
+          setCurrentIndex(existingIndex);
+          setIsPlaying(true);
+        } else {
+          // Video not in playlist, fetch and add it
+          try {
+            const videoDetails = await fetchVideoDetails(videoId);
+            setPlaylist([...playlist, videoDetails]);
+            setCurrentIndex(playlist.length); // Index of the newly added video
+            setIsPlaying(true);
+          } catch (error) {
+            console.error('Error fetching video details:', error);
+            toast.error('Failed to load video');
+          }
+        }
+      }
+    };
+
+    loadVideoFromUrl();
+  }, [videoId]);
 
   useEffect(() => {
     const savedFavorites = localStorage.getItem('vinyl-player-favorites');
@@ -158,19 +192,32 @@ const Index = () => {
     setTimeout(handleSkipNext, 2000);
   };
 
+  const handleBackToHome = () => {
+    navigate('/');
+  };
+
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-white to-gray-100 py-8 px-4 sm:px-6 md:px-8">
-      <header className="w-full max-w-5xl mx-auto mb-8">
-        <h1 className="text-3xl md:text-4xl font-bold text-vinyl-dark text-center mb-2">
-          Retro Vinyl Player
-        </h1>
-        <p className="text-center text-gray-500 max-w-md mx-auto">
-          Experience your YouTube music as if it's playing on vinyl records
-        </p>
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-900 to-black py-8 px-4 sm:px-6 md:px-8 text-white">
+      <header className="w-full max-w-5xl mx-auto mb-8 flex items-center">
+        <Button 
+          variant="ghost" 
+          className="mr-4 text-white hover:bg-white/10" 
+          onClick={handleBackToHome}
+        >
+          <ArrowLeft className="h-5 w-5" />
+        </Button>
+        <div>
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+            Retro Vinyl Player
+          </h1>
+          <p className="text-gray-400 max-w-md">
+            Experience your YouTube music as if it's playing on vinyl records
+          </p>
+        </div>
       </header>
 
       <main className="flex-1 w-full max-w-5xl mx-auto">
-        <div className="player-container backdrop-blur-sm">
+        <div className="player-container backdrop-blur-sm bg-white/5 border border-white/10">
           <div className="player-header">
             <div className="text-lg font-medium">Now Playing</div>
           </div>
@@ -194,7 +241,7 @@ const Index = () => {
               {currentVideo && (
                 <div className="w-full text-center mb-6 animate-fade-in">
                   <h2 className="text-xl font-bold mb-1">{currentVideo.title}</h2>
-                  <p className="text-gray-500">{currentVideo.artist}</p>
+                  <p className="text-gray-400">{currentVideo.artist}</p>
                 </div>
               )}
 
@@ -216,7 +263,7 @@ const Index = () => {
             <div className="lg:w-1/2">
               {isMobile && (
                 <button 
-                  className="w-full py-2 mb-4 text-center bg-gray-100 rounded-lg font-medium"
+                  className="w-full py-2 mb-4 text-center bg-white/10 rounded-lg font-medium"
                   onClick={() => setShowPlaylist(!showPlaylist)}
                 >
                   {showPlaylist ? 'Hide Playlist' : 'Show Playlist'}
@@ -235,7 +282,7 @@ const Index = () => {
                         placeholder="Search..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-8 h-9"
+                        className="pl-8 h-9 bg-white/10 border-white/20 text-white"
                       />
                     </div>
                   </div>
@@ -254,7 +301,7 @@ const Index = () => {
                         />
                       ))
                     ) : (
-                      <div className="text-center py-8 text-gray-500">
+                      <div className="text-center py-8 text-gray-400">
                         {searchTerm ? 'No results found' : 'Your playlist is empty'}
                       </div>
                     )}
